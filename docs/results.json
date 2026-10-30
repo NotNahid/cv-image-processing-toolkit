@@ -1,0 +1,56 @@
+{
+  "generated_at": "2026-10-29T08:15:57+00:00",
+  "commit": "local",
+  "tests_passed": 3,
+  "tests_failed": 0,
+  "synthetic": {
+    "correct": 30,
+    "total": 30,
+    "accuracy": 1.0,
+    "per_shape": {
+      "circle": {
+        "correct": 6,
+        "total": 6
+      },
+      "triangle": {
+        "correct": 6,
+        "total": 6
+      },
+      "square": {
+        "correct": 6,
+        "total": 6
+      },
+      "pentagon": {
+        "correct": 6,
+        "total": 6
+      },
+      "rectangle": {
+        "correct": 6,
+        "total": 6
+      }
+    }
+  },
+  "real_photo_labels": {
+    "book": [
+      "rectangle"
+    ],
+    "dice": [
+      "hexagon"
+    ],
+    "stop_sign": [
+      "circle"
+    ],
+    "coins": [
+      "polygon",
+      "polygon",
+      "polygon"
+    ]
+  },
+  "health": {
+    "cells_detected_smear": 212,
+    "sickle_cells": 8,
+    "normal_cells": 2,
+    "melanoma_solidity": 0.855,
+    "melanoma_irregular": true
+  }
+}

@@ -1,0 +1,47 @@
+/* Liquid-glass controls + dotted grid, adapted for the dark pages (scoped to classes, not every <button>) */
+@property --angle-1{syntax:"<angle>";inherits:false;initial-value:-75deg}
+@property --angle-2{syntax:"<angle>";inherits:false;initial-value:-45deg}
+:root{--glass-t:400ms;--glass-e:cubic-bezier(.25,1,.5,1)}
+
+.dotgrid{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+
+:is(.glass,.chip,.btn,.cta a,.switch,.percentage-indicator,.close-button,.key-hint){
+  --bw:1px;position:relative;border:0;border-radius:999vw;color:rgba(255,255,255,.92);
+  background:linear-gradient(-75deg,rgba(255,255,255,.04),rgba(255,255,255,.16),rgba(255,255,255,.04));
+  box-shadow:inset 0 .125em .125em rgba(0,0,0,.25),inset 0 -.125em .125em rgba(255,255,255,.16),0 .25em .5em -.125em rgba(0,0,0,.7),0 0 .1em .25em inset rgba(255,255,255,.06);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);-webkit-tap-highlight-color:transparent;
+  transition:transform var(--glass-t) var(--glass-e),box-shadow var(--glass-t) var(--glass-e),background var(--glass-t) var(--glass-e),color .2s;
+}
+:is(.glass,.chip,.btn,.cta a){display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.2rem;font:400 12px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;cursor:pointer;text-decoration:none;user-select:none;mix-blend-mode:normal}
+/* outline that rotates on hover */
+:is(.glass,.chip,.btn,.cta a,.switch,.percentage-indicator,.close-button,.key-hint)::after{
+  content:"";position:absolute;inset:0;width:auto;height:auto;border-radius:inherit;padding:var(--bw);box-sizing:border-box;pointer-events:none;z-index:1;
+  background:conic-gradient(from var(--angle-1) at 50% 50%,rgba(255,255,255,.75),rgba(255,255,255,0) 5% 40%,rgba(255,255,255,.75) 50%,rgba(255,255,255,0) 60% 95%,rgba(255,255,255,.75)),linear-gradient(rgba(255,255,255,.16),rgba(255,255,255,.16));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;
+  transition:--angle-1 500ms ease}
+/* moving sheen */
+:is(.glass,.chip,.btn,.cta a)::before{
+  content:"";position:absolute;inset:var(--bw);border-radius:inherit;pointer-events:none;mix-blend-mode:screen;
+  background:linear-gradient(var(--angle-2),rgba(255,255,255,0) 0%,rgba(255,255,255,.3) 40% 50%,rgba(255,255,255,0) 55%) 0% 50%/200% 200% no-repeat;
+  transition:background-position calc(var(--glass-t)*1.25) var(--glass-e),--angle-2 calc(var(--glass-t)*1.25) var(--glass-e)}
+:is(.glass,.chip,.btn,.cta a,.close-button):hover{transform:scale(.975);-webkit-backdrop-filter:blur(1px);backdrop-filter:blur(1px);color:#fff;mix-blend-mode:normal;
+  box-shadow:inset 0 .125em .125em rgba(0,0,0,.25),inset 0 -.125em .125em rgba(255,255,255,.2),0 .15em .3em -.1em rgba(0,0,0,.7),0 0 .05em .1em inset rgba(255,255,255,.14)}
+:is(.glass,.chip,.btn,.cta a,.close-button):hover::after{--angle-1:-125deg;width:auto}
+:is(.glass,.chip,.btn,.cta a):hover::before{background-position:25% 50%}
+:is(.glass,.chip,.btn,.cta a,.close-button):active{transform:translateY(1px) scale(.97)}
+:is(.glass,.chip,.btn,.cta a,.close-button):active::after{--angle-1:-75deg}
+:is(.glass,.chip,.btn,.cta a):active::before{background-position:50% 15%;--angle-2:-15deg}
+@media(hover:none)and(pointer:coarse){:is(.glass,.chip,.btn,.cta a)::before,:is(.glass,.chip,.btn,.cta a):active::before{--angle-2:-45deg}:is(.glass,.chip,.btn,.cta a,.close-button)::after,:is(.glass,.chip,.btn,.cta a,.close-button):hover::after{--angle-1:-75deg}}
+/* selected = bright glass */
+.chip[aria-pressed=true],.glass.is-on{color:#0a0a0a;background:linear-gradient(-75deg,rgba(255,255,255,.72),rgba(255,255,255,.96),rgba(255,255,255,.72));box-shadow:inset 0 .125em .125em rgba(0,0,0,.08),inset 0 -.125em .125em rgba(255,255,255,.6),0 0 1.1em rgba(255,255,255,.18)}
+.chip[aria-pressed=true]:hover{color:#000}
+.chip:focus-visible,.btn:focus-visible,.glass:focus-visible,.cta a:focus-visible,.close-button:focus-visible{outline:2px solid #fff;outline-offset:3px}
+
+/* gallery bits */
+.percentage-indicator{color:rgba(255,255,255,.9)}
+.switch{gap:.6em}
+.switch-button{border-radius:999vw}
+.key-hint{border:0;margin-right:6px}
+body .close-button{position:fixed;width:56px;height:56px;right:24px}
+.close-button svg{width:22px;height:22px}
+.image-title-overlay .glass{pointer-events:auto;margin-top:1.25rem}

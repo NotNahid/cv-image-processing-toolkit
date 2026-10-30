@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CV Image Processing Toolkit — Playground</title>
+<meta name="description" content="Pipeline explorer, in-browser playground and health demos for a classical computer-vision toolkit.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2740%22 cy=%2750%22 r=%2728%22 fill=%22white%22/><circle cx=%2762%22 cy=%2750%22 r=%2728%22 fill=%22gray%22/></svg>">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="classic.css">
+<link rel="stylesheet" href="glass.css">
+</head>
+<body class="page">
+<svg class="dotgrid" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="dottedGrid" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.16)"/></pattern></defs><rect width="100%" height="100%" fill="url(#dottedGrid)"/></svg>
+
+<div class="header">
+  <div class="nav-section"><a class="logo-container" href="index.html" aria-label="Gallery"><div class="logo-circles"><div class="circle circle-1"></div><div class="circle circle-2"></div></div></a></div>
+  <div class="values-section"><h3>+Menu</h3><ul><li><a href="index.html">Gallery</a></li><li><a href="#explorer">Explorer</a></li><li><a href="#playground">Playground</a></li><li><a href="#health">Health</a></li></ul></div>
+  <div class="location-section"><h3>+Build</h3><p><i class="dot" id="bdot"></i><span id="bst">Checking…</span></p><p class="mono-sm" id="bsub">&nbsp;</p></div>
+  <div class="contact-section"><h3>+Results</h3><p id="r1">– shapes right</p><p id="r2">– cells counted</p></div>
+  <div class="social-section"><h3>+Credits</h3><ul><li><a href="https://github.com/khalilurrrahmanridoykhan/cv-image-processing-toolkit" target="_blank" rel="noopener">Original repo</a></li><li><a href="https://opencv.org" target="_blank" rel="noopener">OpenCV</a></li></ul></div>
+</div>
+
+<main>
+<header class="hero">
+  <p class="mono-sm">CV Image Processing Toolkit · Python · OpenCV</p>
+  <h1 class="big">Seeing, step by step.</h1>
+  <p class="lede">Classical computer vision: edges, contours, shapes, and a few medical images. No deep learning, just the maths. This page rebuilds itself on every push.</p>
+  <div class="cta"><a id="lnkColab" href="#" target="_blank" rel="noopener">Open in Colab ↗</a><a id="lnkRepo" href="#" target="_blank" rel="noopener">Source ↗</a><a href="index.html">Gallery</a></div>
+  <div class="stats rv" id="stats">
+    <div><b data-k="acc">–</b><span>Shape accuracy, 30 synthetic images</span></div>
+    <div><b data-k="tests">–</b><span>Automated tests passing</span></div>
+    <div><b data-k="cells">–</b><span>Blood cells found in one smear</span></div>
+    <div><b data-k="built">–</b><span>Since the last automated build</span></div>
+  </div>
+</header>
+
+<section id="explorer" class="sec rv"><div class="lab">(01) Pipeline explorer</div><div class="body">
+  <h2>Pick a photo. Step through it.</h2>
+  <p class="lead">Use the arrow keys once the picture is focused.</p>
+  <div class="chips" id="photos" role="group" aria-label="Photo"></div>
+  <div class="stage" id="stage" tabindex="0">
+    <div><div class="frame"><img id="img" alt=""></div><p class="cap" id="cap"></p></div>
+    <div><div class="steps" id="steps" role="tablist"></div>
+      <div class="row"><button class="btn" id="play">▶ Auto-play</button><span id="lab"></span></div></div>
+  </div>
+</div></section>
+
+<section id="playground" class="sec rv"><div class="lab">(02) Playground</div><div class="body">
+  <h2>Do it yourself.</h2>
+  <p class="lead">Runs in your browser. Drag the slider, or drop in your own photo. Nothing is uploaded.</p>
+  <div class="pg">
+    <canvas id="cv" width="480" height="360" aria-label="Processed image"></canvas>
+    <div class="ctl">
+      <div class="chips" id="modes" role="group" aria-label="Mode"></div>
+      <label>Threshold <b id="tv">128</b></label><input type="range" id="th" min="0" max="255" value="128">
+      <div class="row"><button class="btn" id="otsu">Auto (Otsu)</button><label><input type="checkbox" id="inv"> Invert</label></div>
+      <div class="chips" id="samples" style="margin-top:1rem"></div>
+      <label class="drop">Drop or choose an image<input type="file" id="file" accept="image/*" hidden></label>
+      <p class="cap" id="pgs"></p>
+    </div>
+  </div>
+</div></section>
+
+<section id="health" class="sec rv"><div class="lab">(03) Health &amp; biomedical</div><div class="body">
+  <h2>Same tools, medical images.</h2>
+  <p class="lead">Open-licensed images, educational only. Not a diagnosis.</p>
+  <div class="h3">
+    <div><div class="cmp" data-a="xray_after" data-b="xray_before" data-l="Original|CLAHE"></div><h3>Chest X-ray</h3><p>Drag to compare. Adaptive contrast brings out ribs and tissue.</p></div>
+    <div><div class="cmp" data-a="retina_after" data-b="retina_before" data-l="Color|Edges"></div><h3>Retina edge map</h3><p>Green channel, CLAHE, Canny. Noisy: a dedicated vessel filter would do better.</p></div>
+    <div><img src="assets/melanoma.jpg" alt="Melanoma border versus convex hull" loading="lazy"><h3>Border check</h3><p>Green is the real edge, red the convex hull. Low solidity means a jagged border.</p><div class="mt" id="m-mel"></div></div>
+    <div><img src="assets/sickle.jpg" alt="Classified blood cells" loading="lazy"><h3>Cell shape metrics</h3><p>Run on an NHLBI <b>illustration</b>, not a real smear, so this shows the metrics rather than detecting real cells.</p><div class="mt" id="m-sk"></div></div>
+    <div><img src="assets/smear.jpg" alt="Detected cells in a blood smear" loading="lazy"><h3>Blood smear</h3><p>Mask the eyepiece circle, then distance transform and watershed split touching cells.</p><div class="mt" id="m-sm"></div></div>
+  </div>
+</div></section>
+
+<section id="cicd" class="sec rv"><div class="lab">(04) Always up to date</div><div class="body">
+  <h2>Nothing here is hand-edited.</h2>
+  <p class="lead">Every push runs the tests, regenerates each image and number from the real code, and redeploys.</p>
+  <div class="pipe" id="pipe" data-s="idle">
+    <div class="node"><i class="dot"></i><b>Push</b><span>commit to main</span></div>
+    <div class="node"><i class="dot"></i><b>Test</b><span>pytest + accuracy</span></div>
+    <div class="node"><i class="dot"></i><b>Build</b><span>images + results</span></div>
+    <div class="node"><i class="dot"></i><b>Deploy</b><span>GitHub Pages</span></div>
+  </div>
+  <div class="ci"><span><i class="dot" id="cdot"></i><b id="ctxt" style="font-weight:400">Latest run: checking…</b></span><span class="meta" id="cmeta"></span></div>
+  <pre>img  = load_image("data/real/book.jpg")
+mask = threshold_otsu(blur(to_grayscale(img)))
+print([classify_contour(c) for c in find_contours(mask, 100)])  # ['rectangle']</pre>
+</div></section>
+</main>
+
+<footer class="end"><span>Built on the original toolkit by @khalilurrrahmanridoykhan · Apache-2.0</span><span>Health demos are educational, not medical advice</span></footer>
+<div class="page-vignette-container"><div class="page-vignette-extreme"></div></div>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+/* repo auto-detect on GitHub Pages; edit the fallback when previewing locally */
+const H=location.hostname,P=location.pathname.split('/')[1];
+const O=H.endsWith('.github.io')?H.split('.')[0]:'YOUR_USERNAME',R=H.endsWith('.github.io')&&P?P:'cv-image-processing-toolkit';
+const API=`https://api.github.com/repos/${O}/${R}`,GH=`https://github.com/${O}/${R}`;
+$('#lnkRepo').href=GH;
+$('#lnkColab').href=`https://colab.research.google.com/github/${O}/${R}/blob/main/notebooks/cv_image_processing_toolkit_colab.ipynb`;
+
+const ago=d=>{const s=Math.max(0,(Date.now()-new Date(d))/1e3|0);return s<60?s+'s':s<3600?(s/60|0)+'m':s<86400?(s/3600|0)+'h':(s/86400|0)+'d'};
+let R_=null,lastRun=null,lastBuild=null;
+
+/* ---- live CI status (GitHub API, polled) ---- */
+async function pollCI(){
+  try{
+    const r=await fetch(API+'/actions/runs?per_page=1');if(!r.ok)throw 0;
+    const run=(await r.json()).workflow_runs?.[0];if(!run)throw 0;lastRun=run;
+    const s=run.status!=='completed'?'run':run.conclusion==='success'?'ok':'bad';
+    const t={run:'Build running…',ok:'Build passing',bad:'Build failing'}[s];
+    $('#bdot').className=$('#cdot').className='dot '+s;$('#bst').textContent=t.replace('Build ','');
+    $('#ctxt').textContent='Latest run: '+t.toLowerCase();
+    $('#pipe').dataset.s=s==='ok'?'success':s==='bad'?'failure':'run';
+    $('#cmeta').innerHTML=`<code>${run.head_sha.slice(0,7)}</code> ${(run.display_title||'').replace(/</g,'&lt;')} · <span id="cago"></span>`;tick();
+  }catch{$('#bst').textContent='Offline preview';$('#bsub').textContent='live on GitHub Pages';$('#ctxt').textContent='Latest run: connect on GitHub Pages to see live status'}
+}
+async function pollStars(){try{const j=await(await fetch(API)).json();if(j.stargazers_count!=null)$('#stars').textContent=j.stargazers_count+' stars'}catch{}}
+function tick(){if(lastRun)$('#bsub').textContent=lastRun.head_sha.slice(0,7)+' · '+ago(lastRun.updated_at)+' ago';const a=$('#cago');if(a&&lastRun)a.textContent='updated '+ago(lastRun.updated_at)+' ago';
+  if(lastBuild)$('[data-k=built]').textContent=ago(lastBuild);}
+
+/* ---- results.json (written by CI) ---- */
+function count(el,to,fmt){const t0=performance.now();(function f(n){const p=Math.min(1,(n-t0)/900),e=1-Math.pow(1-p,3);el.textContent=fmt(to*e);if(p<1)requestAnimationFrame(f)})(t0)}
+const mt=(id,a)=>$(id).innerHTML=a.map(([k,v])=>`<span>${k} <b>${v}</b></span>`).join('');
+async function loadResults(){
+  try{
+    R_=await(await fetch('results.json?'+Date.now())).json();const s=R_.synthetic,h=R_.health;
+    count($('[data-k=acc]'),s.accuracy*100,v=>v.toFixed(0)+'%');
+    count($('[data-k=tests]'),R_.tests_passed,v=>Math.round(v)+(R_.tests_failed?' ✗':' ✓'));
+    count($('[data-k=cells]'),h.cells_detected_smear,v=>Math.round(v));
+    lastBuild=R_.generated_at;tick();$('#r1').textContent=s.correct+'/'+s.total+' shapes right';$('#r2').textContent=h.cells_detected_smear+' cells counted';
+    mt('#m-mel',[['solidity',h.melanoma_solidity],['border',h.melanoma_irregular?'irregular':'regular']]);
+    mt('#m-sk',[['elongated',h.sickle_cells],['round',h.normal_cells]]);mt('#m-sm',[['cells',h.cells_detected_smear]]);
+    renderExplorer();
+  }catch{$$('[data-k]').forEach(e=>e.textContent='n/a')}
+}
+
+/* ---- pipeline explorer ---- */
+const photos={book:['Book','The clean case: high contrast, one rectangle.'],dice:['Dice','A cube at an angle has a hexagonal silhouette.'],stop_sign:['Stop sign','Segmented by red colour. An octagon and a circle both simplify to about 8 vertices, a known limit of geometric rules.'],coins:['Coins','A hard case: shiny ridges break a single global threshold.']};
+const steps=[['original','Original','Raw pixels loaded with OpenCV.'],['gray','Grayscale','One channel: only brightness is kept.'],['blur','Gaussian blur','Smooths noise so edges are real edges.'],['mask','Binary mask','Otsu picks the threshold automatically.'],['edges','Auto-Canny','Edge map with thresholds taken from the image median.'],['result','Classified','Contours → circularity + corner count → a label.']];
+let ph='book',si=0,timer=null;
+$('#photos').innerHTML=Object.entries(photos).map(([k,v])=>`<button class="chip" data-p="${k}" aria-pressed="${k===ph}">${v[0]}</button>`).join('');
+$('#steps').innerHTML=steps.map((s,i)=>`<button class="tab" role="tab" data-i="${i}"><i>${i+1}</i>${s[1]}</button>`).join('');
+steps.forEach(s=>Object.keys(photos).forEach(p=>{new Image().src=`assets/${p}_${s[0]}.jpg`}));
+function renderExplorer(){
+  const s=steps[si];$('#img').src=`assets/${ph}_${s[0]}.jpg`;$('#img').alt=`${photos[ph][0]}: ${s[1]}`;
+  $('#cap').innerHTML=`<b>${s[1]}.</b> ${s[2]}<br>${si===5?photos[ph][1]:''}`;
+  $$('.tab').forEach((t,i)=>t.setAttribute('aria-selected',i===si));$$('#photos .chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.p===ph));
+  const l=R_?.real_photo_labels?.[ph];$('#lab').innerHTML=si===5&&l?`<span class="tag">${[...new Set(l)].join(', ')}</span>`:'';
+}
+$('#photos').onclick=e=>{const b=e.target.closest('[data-p]');if(b){ph=b.dataset.p;renderExplorer()}};
+$('#steps').onclick=e=>{const b=e.target.closest('[data-i]');if(b){si=+b.dataset.i;renderExplorer()}};
+$('#stage').onkeydown=e=>{if(e.key==='ArrowRight')si=Math.min(5,si+1);else if(e.key==='ArrowLeft')si=Math.max(0,si-1);else return;e.preventDefault();renderExplorer()};
+$('#play').onclick=()=>{if(timer){clearInterval(timer);timer=null;$('#play').textContent='▶ Auto-play';return}
+  $('#play').textContent='❚❚ Pause';timer=setInterval(()=>{si=(si+1)%6;renderExplorer()},1700)};
+renderExplorer();
+
+/* ---- in-browser playground ---- */
+const cv=$('#cv'),cx=cv.getContext('2d',{willReadFrequently:true});let gray=null,W=0,Hh=0,mode='Threshold';
+$('#modes').innerHTML=['Gray','Threshold','Edges'].map(m=>`<button class="chip" aria-pressed="${m===mode}">${m}</button>`).join('');
+$('#samples').innerHTML=['book','dice','coins'].map(s=>`<button class="chip" data-s="${s}" aria-pressed="false">${s}</button>`).join('');
+function otsu(g){const h=new Array(256).fill(0);g.forEach(v=>h[v]++);const n=g.length;let sum=0;for(let i=0;i<256;i++)sum+=i*h[i];
+  let wb=0,sb=0,best=0,t=128;for(let i=0;i<256;i++){wb+=h[i];if(!wb)continue;const wf=n-wb;if(!wf)break;sb+=i*h[i];
+  const v=wb*wf*Math.pow(sb/wb-(sum-sb)/wf,2);if(v>best){best=v;t=i}}return t}
+function draw(){
+  if(!gray)return;const out=cx.createImageData(W,Hh),d=out.data,t=+$('#th').value,inv=$('#inv').checked;let white=0;
+  for(let y=0;y<Hh;y++)for(let x=0;x<W;x++){const i=y*W+x;let v;
+    if(mode==='Gray')v=gray[i];
+    else if(mode==='Threshold'){v=(gray[i]>t)!==inv?255:0;white+=v>0}
+    else{if(x<1||y<1||x>=W-1||y>=Hh-1)v=0;else{const g=k=>gray[i+k],gx=-g(-W-1)+g(-W+1)-2*g(-1)+2*g(1)-g(W-1)+g(W+1),gy=-g(-W-1)-2*g(-W)-g(-W+1)+g(W-1)+2*g(W)+g(W+1);
+      v=Math.min(255,Math.hypot(gx,gy)/ (t/64+.5));v=inv?255-v:v}}
+    d[i*4]=d[i*4+1]=d[i*4+2]=v;d[i*4+3]=255}
+  cx.putImageData(out,0,0);$('#pgs').textContent=mode==='Threshold'?`${(white/(W*Hh)*100).toFixed(0)}% of pixels are white`:'';
+}
+function useImage(im){const s=Math.min(1,480/im.width);W=cv.width=Math.round(im.width*s);Hh=cv.height=Math.round(im.height*s);
+  cx.drawImage(im,0,0,W,Hh);try{const p=cx.getImageData(0,0,W,Hh).data;gray=new Uint8Array(W*Hh);
+  for(let i=0;i<gray.length;i++)gray[i]=.299*p[i*4]+.587*p[i*4+1]+.114*p[i*4+2];$('#th').value=$('#tv').textContent=otsu(gray);draw()}
+  catch{$('#pgs').textContent='Browser blocked pixel access (open via GitHub Pages or a local server).'}}
+function sample(n){const im=new Image();im.onload=()=>useImage(im);im.src=`assets/${n}_original.jpg`;$$('#samples .chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.s===n))}
+$('#modes').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;mode=b.textContent;$$('#modes .chip').forEach(c=>c.setAttribute('aria-pressed',c===b));draw()};
+$('#samples').onclick=e=>{const b=e.target.closest('[data-s]');if(b)sample(b.dataset.s)};
+$('#th').oninput=e=>{$('#tv').textContent=e.target.value;requestAnimationFrame(draw)};$('#inv').onchange=draw;
+$('#otsu').onclick=()=>{if(gray){$('#th').value=$('#tv').textContent=otsu(gray);draw()}};
+const loadFile=f=>{if(!f||!f.type.startsWith('image/'))return;const im=new Image();im.onload=()=>{useImage(im);$$('#samples .chip').forEach(c=>c.setAttribute('aria-pressed',false))};im.src=URL.createObjectURL(f)};
+$('#file').onchange=e=>loadFile(e.target.files[0]);
+['dragover','drop'].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest('.pg')){e.preventDefault();if(ev==='drop')loadFile(e.dataTransfer.files[0])}}));
+sample('book');
+
+/* ---- before/after sliders ---- */
+$$('.cmp').forEach(c=>{const[l1,l2]=c.dataset.l.split('|');
+  c.innerHTML=`<img src="assets/${c.dataset.a}.jpg" alt="${l2}" loading="lazy"><img class="top" src="assets/${c.dataset.b}.jpg" alt="${l1}" loading="lazy"><i class="bar"></i><em style="left:8px">${l1}</em><em style="right:8px">${l2}</em><input type="range" min="0" max="100" value="50" aria-label="Compare ${l1} and ${l2}">`;
+  c.querySelector('input').oninput=e=>c.style.setProperty('--v',e.target.value+'%')});
+
+/* ---- reveal + polling ---- */
+const io=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add('in')),{threshold:.08});$$('.rv').forEach(e=>io.observe(e));
+pollCI();loadResults();setInterval(pollCI,30000);setInterval(loadResults,60000);setInterval(tick,1000);
+</script>
+</body>
+</html>
