@@ -2,7 +2,7 @@
 
 from toolkit.io import load_image, to_grayscale, to_rgb
 from toolkit.preprocess import apply_clahe, blur, morphological_clean, threshold_otsu
-from toolkit.edges import canny_edges, sobel_edges
+from toolkit.edges import auto_canny, canny_edges, sobel_edges
 from toolkit.contours import draw_contours, find_contours
 from toolkit.segmentation import separate_touching_cells
 from toolkit.shapes import (
@@ -23,6 +23,7 @@ __all__ = [
     "morphological_clean",
     "sobel_edges",
     "canny_edges",
+    "auto_canny",
     "find_contours",
     "draw_contours",
     "separate_touching_cells",
